@@ -81,7 +81,7 @@ export function DashboardCards() {
   const load = (inicio: string, fim: string) => {
     setError('');
     const params = new URLSearchParams({ data_inicio: inicio, data_fim: fim });
-    fetch(`/api/dashboard?${params}`)
+    fetch(`/api/dashboard?${params}`, { cache: 'no-store' })
       .then(async (res) => {
         const text = await res.text();
         if (!text) return { success: false, error: 'Resposta vazia', status: res.status };

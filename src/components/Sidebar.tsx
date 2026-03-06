@@ -171,7 +171,7 @@ export function Sidebar({ userName, isMobileOpen = false, onClose }: SidebarProp
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
-    fetch('/api/auth/permissions')
+    fetch('/api/auth/permissions', { cache: 'no-store' })
       .then((r) => r.json())
       .then((data) => {
         if (data.success && Array.isArray(data.data?.permissions)) {

@@ -18,7 +18,7 @@ function toDateString(val: unknown): string | null {
 }
 
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 export const dynamicParams = false;
 
 export function generateStaticParams() {

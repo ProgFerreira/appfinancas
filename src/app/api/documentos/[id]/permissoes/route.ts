@@ -5,7 +5,7 @@ import { canDo } from '@/lib/documentPermissions';
 import type { DocumentoPermissao } from '@/types';
 
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 export const dynamicParams = false;
 
 export function generateStaticParams() {

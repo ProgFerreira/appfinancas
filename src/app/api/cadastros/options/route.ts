@@ -7,7 +7,7 @@ import { query } from '@/lib/db';
  * categorias_despesa, categorias_receita, centros_custo, contas_bancarias, plano_contas
  */
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {

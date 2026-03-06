@@ -7,7 +7,7 @@ import { query } from '@/lib/db';
  * Não exige autenticação (pode ser chamado antes do login).
  */
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {

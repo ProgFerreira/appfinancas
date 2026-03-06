@@ -4,7 +4,7 @@ import { query } from '@/lib/db';
 
 /** Retorna classificações, grupos DRE e naturezas para os formulários do plano de contas. */
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {

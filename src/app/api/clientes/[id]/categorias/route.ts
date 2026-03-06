@@ -5,7 +5,7 @@ import { query } from '@/lib/db';
 const CATEGORIAS = ['cliente', 'fornecedor', 'funcionario', 'parceiro', 'empresa', 'outros'] as const;
 
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 export const dynamicParams = false;
 
 export function generateStaticParams() {

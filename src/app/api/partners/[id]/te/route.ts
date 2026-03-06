@@ -3,7 +3,7 @@ import { getSessionUserId } from '@/lib/auth';
 import * as partnerTERepo from '@/repositories/cotacao/partnerTE.repo';
 
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 export const dynamicParams = false;
 
 export function generateStaticParams() {

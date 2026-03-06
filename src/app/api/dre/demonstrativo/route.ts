@@ -4,7 +4,7 @@ import { hasPermission } from '@/lib/rbac';
 import { DreDemonstrativoService } from '@/modules/finance/services/DreDemonstrativoService';
 
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {

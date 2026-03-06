@@ -4,7 +4,7 @@ import { query } from '@/lib/db';
 import type { Usuario } from '@/types';
 
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
   const userId = await getSessionUserId();

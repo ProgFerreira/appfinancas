@@ -3,7 +3,7 @@ import { getSessionUserId } from '@/lib/auth';
 import * as priceTableRepo from '@/repositories/cotacao/priceTable.repo';
 
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {

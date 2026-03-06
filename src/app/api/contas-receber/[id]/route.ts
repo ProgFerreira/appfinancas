@@ -4,7 +4,7 @@ import { query } from '@/lib/db';
 import type { ContaReceber } from '@/types';
 
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 export const dynamicParams = false;
 
 export function generateStaticParams() {

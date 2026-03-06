@@ -5,7 +5,7 @@ import { PayableService } from '@/modules/finance/services/PayableService';
 
 /** Registra baixa (pagamento) de uma conta a pagar. Usa PayableService (ledger + auditoria). */
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 export const dynamicParams = false;
 
 export function generateStaticParams() {

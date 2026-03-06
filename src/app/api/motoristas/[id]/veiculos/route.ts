@@ -8,7 +8,7 @@ import { query } from '@/lib/db';
  * Atualiza o veículo: proprietario_tipo = 'motorista', proprietario_id = id do motorista.
  */
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 export const dynamicParams = false;
 
 export function generateStaticParams() {

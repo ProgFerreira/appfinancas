@@ -4,7 +4,7 @@ import { ReconciliationService } from '@/modules/bank/reconciliation/Reconciliat
 import { hasPermission } from '@/lib/rbac';
 
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
   try {

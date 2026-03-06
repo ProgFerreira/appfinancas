@@ -3,7 +3,7 @@ import { getSessionUserId } from '@/lib/auth';
 import * as cepPracasRepo from '@/repositories/cotacao/cepPracas.repo';
 
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {

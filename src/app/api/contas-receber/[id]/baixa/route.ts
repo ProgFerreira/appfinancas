@@ -5,7 +5,7 @@ import { ReceivableService } from '@/modules/finance/services/ReceivableService'
 
 /** Registra baixa (recebimento) de uma conta a receber. Usa ReceivableService (ledger + auditoria). */
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 export const dynamicParams = false;
 
 export function generateStaticParams() {

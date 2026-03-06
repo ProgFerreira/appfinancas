@@ -121,7 +121,7 @@ function validarCliente(body: unknown): ValidatedCliente | null {
 }
 
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {

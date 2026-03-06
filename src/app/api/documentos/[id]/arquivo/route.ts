@@ -14,7 +14,7 @@ import {
  * Body: FormData com campo "file".
  */
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 export const dynamicParams = false;
 
 export function generateStaticParams() {

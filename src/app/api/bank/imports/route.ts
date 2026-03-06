@@ -4,7 +4,7 @@ import { query } from '@/lib/db';
 import { hasPermission } from '@/lib/rbac';
 
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {

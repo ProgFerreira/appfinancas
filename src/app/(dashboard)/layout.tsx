@@ -5,6 +5,8 @@ import { query } from '@/lib/db';
 import { DashboardShell } from '@/components/DashboardShell';
 import type { Usuario } from '@/types';
 
+export const dynamic = 'force-dynamic';
+
 async function getUser(id: number): Promise<Usuario | null> {
   const rows = await query<Usuario[]>(
     'SELECT id, nome, email, perfil, status FROM usuarios WHERE id = ? LIMIT 1',

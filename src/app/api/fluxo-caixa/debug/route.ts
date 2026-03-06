@@ -8,7 +8,7 @@ import { query } from '@/lib/db';
  * GET /api/fluxo-caixa/debug?conta_pagar_id=5
  */
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {

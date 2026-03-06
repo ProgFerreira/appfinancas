@@ -23,7 +23,7 @@ function sanitizeRow(row: Record<string, unknown>): Record<string, unknown> {
 }
 
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {

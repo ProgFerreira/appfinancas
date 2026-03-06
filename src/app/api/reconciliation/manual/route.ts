@@ -10,7 +10,7 @@ import { hasPermission } from '@/lib/rbac';
  * Exatamente um de payable_payment_id ou receivable_receipt_id deve ser enviado.
  */
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
   try {

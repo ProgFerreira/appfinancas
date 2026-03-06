@@ -9,7 +9,7 @@ import { hasPermission } from '@/lib/rbac';
  * Body: cliente_id (obrigatório), data_competencia?, descricao?, categoria_receita_id?, plano_contas_id?
  */
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 export const dynamicParams = false;
 
 export function generateStaticParams(): { id: string }[] {

@@ -4,7 +4,7 @@ import * as partnerFeeRangesRepo from '@/repositories/cotacao/partnerFeeRanges.r
 import type { FaixaPesoRow, FaixaFreteRow } from '@/repositories/cotacao/partnerFeeRanges.repo';
 
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 export const dynamicParams = false;
 
 export function generateStaticParams() {

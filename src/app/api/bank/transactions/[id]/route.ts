@@ -3,7 +3,7 @@ import { getSessionUserId } from '@/lib/auth';
 import { query } from '@/lib/db';
 import { hasPermission } from '@/lib/rbac';
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 
 export function generateStaticParams(): { id: string }[] {
   return [{ id: '0' }];

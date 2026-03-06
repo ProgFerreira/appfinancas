@@ -27,7 +27,7 @@ function toDateStr(v: string | Date | null | undefined): string {
  * Pagamentos/recebimentos já conciliados com OFX não são duplicados (entra só a linha do banco).
  */
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {
