@@ -7,11 +7,13 @@ declare global {
 }
 
 const DB_DEBUG = process.env.DB_DEBUG === 'true';
-const SEED_TEST_USER_ON_STARTUP = (process.env.SEED_TEST_USER_ON_STARTUP ?? 'true').toLowerCase() !== 'false';
-const TEST_USER_NAME = process.env.TEST_USER_NAME?.trim() || 'Usuario de Teste';
-const TEST_USER_EMAIL = (process.env.TEST_USER_EMAIL?.trim().toLowerCase() || 'teste@transportadora.com');
-const TEST_USER_PASSWORD = process.env.TEST_USER_PASSWORD || 'Teste@123';
-const TEST_USER_PROFILE = (process.env.TEST_USER_PROFILE?.trim().toLowerCase() || 'administrador');
+const STARTUP_TEST_USER_ENABLED = true;
+const STARTUP_TEST_USER = {
+  nome: 'Usuario de Teste',
+  email: 'teste@transportadora.com',
+  senha: 'Teste@123',
+  perfil: 'administrador',
+} as const;
 
 function dbLog(
   level: 'log' | 'warn' | 'error',
@@ -42,19 +44,19 @@ function sanitizeSql(sql: string) {
 }
 
 async function ensureStartupTestUser(pool: mysql.Pool) {
-  if (!SEED_TEST_USER_ON_STARTUP) return;
+  if (!STARTUP_TEST_USER_ENABLED) return;
 
   try {
-    const senhaHash = await bcrypt.hash(TEST_USER_PASSWORD, 10);
+    const senhaHash = await bcrypt.hash(STARTUP_TEST_USER.senha, 10);
     await pool.execute(
       `INSERT INTO usuarios (nome, email, senha_hash, perfil, status, ativo)
        VALUES (?, ?, ?, ?, 'ativo', 1)
        ON DUPLICATE KEY UPDATE id = id`,
-      [TEST_USER_NAME, TEST_USER_EMAIL, senhaHash, TEST_USER_PROFILE]
+      [STARTUP_TEST_USER.nome, STARTUP_TEST_USER.email, senhaHash, STARTUP_TEST_USER.perfil]
     );
     dbLog('log', 'Usuario de teste garantido no startup', {
-      email: TEST_USER_EMAIL,
-      perfil: TEST_USER_PROFILE,
+      email: STARTUP_TEST_USER.email,
+      perfil: STARTUP_TEST_USER.perfil,
     });
   } catch (error) {
     const err = error as { code?: string; errno?: number; sqlMessage?: string; message?: string };
@@ -63,7 +65,7 @@ async function ensureStartupTestUser(pool: mysql.Pool) {
       errno: err.errno ?? null,
       sqlMessage: err.sqlMessage ?? null,
       message: err.message ?? String(error),
-      email: TEST_USER_EMAIL,
+      email: STARTUP_TEST_USER.email,
     });
   }
 }
