@@ -84,7 +84,7 @@ export function DespesasFixasList() {
           href="/despesas-fixas/novo"
           className="btn btn-primary"
         >
-          Nova despesa fixa
+          Nova despesas
         </Link>
       </div>
       {loading ? (

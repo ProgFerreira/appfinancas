@@ -8,11 +8,11 @@ export default function NovaDespesaFixaPage() {
         items={[
           { label: 'Dashboard', href: '/dashboard' },
           { label: 'Despesas fixas', href: '/despesas-fixas' },
-          { label: 'Nova' },
+          { label: 'Nova despesas' },
         ]}
       />
       <div className="mt-6 max-w-6xl">
-        <h2 className="form-page-title">Nova despesa fixa</h2>
+        <h2 className="form-page-title">Nova despesas</h2>
         <p className="form-page-subtitle">Preencha os dados da despesa recorrente. Campos com * são obrigatórios.</p>
         <DespesaFixaForm />
       </div>
