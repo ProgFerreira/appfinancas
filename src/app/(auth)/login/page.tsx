@@ -1,10 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
-  const router = useRouter();
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [error, setError] = useState('');
@@ -32,8 +30,8 @@ export default function LoginPage() {
         setError(data.error ?? 'Erro ao entrar.');
         return;
       }
-      router.push('/dashboard');
-      router.refresh();
+      // Redirecionamento completo para garantir que o cookie de sessão seja enviado no próximo request
+      window.location.href = '/dashboard';
     } catch {
       setError('Erro de conexão. Verifique sua internet ou se o servidor está no ar. Em hospedagem estática (apenas pasta out/), o login só funciona com Node.js.');
     } finally {
