@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
 import { query } from '@/lib/db';
 import { createSession } from '@/lib/auth';
 import bcrypt from 'bcryptjs';
@@ -46,18 +45,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const cookieStore = await cookies();
-    cookieStore.set('session', createSession(user.id), {
+    const response = NextResponse.json({
+      success: true,
+      data: { id: user.id, nome: user.nome, email: user.email, perfil: user.perfil },
+    });
+    response.cookies.set('session', createSession(user.id), {
       httpOnly: true,
       path: '/',
       maxAge: 60 * 60 * 24 * 7,
       sameSite: 'lax',
       secure: process.env.NODE_ENV === 'production',
     });
-    return NextResponse.json({
-      success: true,
-      data: { id: user.id, nome: user.nome, email: user.email, perfil: user.perfil },
-    });
+    return response;
   } catch (e) {
     console.error('Login error:', e);
     return NextResponse.json(
