@@ -1,0 +1,247 @@
+/**
+ * Tema CSS da aplicação Caixa - para uso no Financas
+ * Variáveis de design (light/dark), fontes, scrollbar e classes utilitárias.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+/* ========== VARIÁVEIS :root (tema claro) ========== */
+:root {
+  --background: 220 20% 97%;
+  --foreground: 220 25% 10%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 220 25% 10%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 220 25% 10%;
+
+  --primary: 217 91% 50%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 220 16% 93%;
+  --secondary-foreground: 220 25% 20%;
+
+  --muted: 220 16% 95%;
+  --muted-foreground: 220 10% 46%;
+
+  --accent: 220 16% 93%;
+  --accent-foreground: 220 25% 20%;
+
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+
+  --success: 152 69% 31%;
+  --success-foreground: 0 0% 100%;
+
+  --warning: 38 92% 50%;
+  --warning-foreground: 0 0% 100%;
+
+  --income: 152 69% 31%;
+  --income-foreground: 0 0% 100%;
+
+  --expense: 0 72% 51%;
+  --expense-foreground: 0 0% 100%;
+
+  --border: 220 16% 90%;
+  --input: 220 16% 90%;
+  --ring: 217 91% 50%;
+
+  --radius: 0.625rem;
+
+  --sidebar-background: 222 47% 11%;
+  --sidebar-foreground: 220 16% 80%;
+  --sidebar-primary: 217 91% 60%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 222 40% 16%;
+  --sidebar-accent-foreground: 220 16% 90%;
+  --sidebar-border: 222 30% 18%;
+  --sidebar-ring: 217 91% 60%;
+  --sidebar-muted: 220 10% 46%;
+
+  --chart-1: 217 91% 50%;
+  --chart-2: 152 69% 31%;
+  --chart-3: 0 72% 51%;
+  --chart-4: 38 92% 50%;
+  --chart-5: 262 83% 58%;
+
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+/* ========== TEMA ESCURO (.dark) ========== */
+.dark {
+  --background: 222 47% 6%;
+  --foreground: 220 16% 93%;
+
+  --card: 222 47% 9%;
+  --card-foreground: 220 16% 93%;
+
+  --popover: 222 47% 9%;
+  --popover-foreground: 220 16% 93%;
+
+  --primary: 217 91% 60%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 222 40% 16%;
+  --secondary-foreground: 220 16% 90%;
+
+  --muted: 222 40% 14%;
+  --muted-foreground: 220 10% 55%;
+
+  --accent: 222 40% 16%;
+  --accent-foreground: 220 16% 90%;
+
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+
+  --success: 152 69% 40%;
+  --success-foreground: 0 0% 100%;
+
+  --warning: 38 92% 50%;
+  --warning-foreground: 0 0% 100%;
+
+  --income: 152 69% 40%;
+  --income-foreground: 0 0% 100%;
+
+  --expense: 0 72% 55%;
+  --expense-foreground: 0 0% 100%;
+
+  --border: 222 30% 18%;
+  --input: 222 30% 18%;
+  --ring: 217 91% 60%;
+
+  --sidebar-background: 222 47% 7%;
+  --sidebar-foreground: 220 16% 75%;
+  --sidebar-primary: 217 91% 60%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 222 40% 12%;
+  --sidebar-accent-foreground: 220 16% 90%;
+  --sidebar-border: 222 30% 14%;
+  --sidebar-ring: 217 91% 60%;
+  --sidebar-muted: 220 10% 46%;
+
+  --chart-1: 217 91% 60%;
+  --chart-2: 152 69% 40%;
+  --chart-3: 0 72% 55%;
+  --chart-4: 38 92% 55%;
+  --chart-5: 262 83% 65%;
+}
+
+/* ========== BASE (visual Caixa no body) ========== */
+body.caixa-theme {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.caixa-theme * {
+  border-color: hsl(var(--border));
+}
+
+/* ========== SCROLLBAR ========== */
+.caixa-theme ::-webkit-scrollbar,
+:root:has(.caixa-theme) ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.caixa-theme ::-webkit-scrollbar-track,
+:root:has(.caixa-theme) ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.caixa-theme ::-webkit-scrollbar-thumb,
+:root:has(.caixa-theme) ::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 9999px;
+}
+
+.caixa-theme ::-webkit-scrollbar-thumb:hover,
+:root:has(.caixa-theme) ::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.3);
+}
+
+/* ========== CLASSES UTILITÁRIAS (financeiro) ========== */
+.financial-card {
+  background-color: hsl(var(--card));
+  border-radius: 0.75rem;
+  border: 1px solid hsl(var(--border));
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  transition: box-shadow 0.2s;
+}
+
+.financial-card:hover {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  color: hsl(var(--muted-foreground));
+}
+
+.income-text {
+  color: hsl(var(--income));
+}
+
+.expense-text {
+  color: hsl(var(--expense));
+}
+
+.warning-text {
+  color: hsl(var(--warning));
+}
+
+.badge-income {
+  background: hsl(var(--income) / 0.1);
+  color: hsl(var(--income));
+}
+
+.badge-expense {
+  background: hsl(var(--expense) / 0.1);
+  color: hsl(var(--expense));
+}
+
+.badge-warning {
+  background: hsl(var(--warning) / 0.1);
+  color: hsl(var(--warning));
+}
+
+.badge-primary {
+  background: hsl(var(--primary) / 0.1);
+  color: hsl(var(--primary));
+}
+
+.badge-success {
+  background: hsl(var(--success) / 0.1);
+  color: hsl(var(--success));
+}
+
+.badge-destructive {
+  background: hsl(var(--destructive) / 0.1);
+  color: hsl(var(--destructive));
+}
+
+/* Helpers de cor */
+.text-income { color: hsl(var(--income)); }
+.text-expense { color: hsl(var(--expense)); }
+.text-primary { color: hsl(var(--primary)); }
+.text-muted-foreground { color: hsl(var(--muted-foreground)); }
+.bg-card { background-color: hsl(var(--card)); }
+.bg-background { background-color: hsl(var(--background)); }
+.bg-muted { background-color: hsl(var(--muted)); }
+.bg-primary { background-color: hsl(var(--primary)); }
+.border-border { border-color: hsl(var(--border)); }
+.rounded-xl { border-radius: 0.75rem; }
+.rounded-lg { border-radius: var(--radius); }

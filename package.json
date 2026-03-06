@@ -6,15 +6,29 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "node --test tests/competence-and-ledger.test.js tests/dre-cashflow-recon.test.js",
+    "postinstall": "node -e \"if (process.platform !== 'win32') { const p = require('path').join(process.cwd(), 'node_modules', '.bin', 'next'); try { require('fs').chmodSync(p, 0o755); } catch (e) {} }\""
   },
   "dependencies": {
+    "@hello-pangea/dnd": "^18.0.1",
+    "@tanstack/react-table": "^8.20.5",
+    "bcryptjs": "^3.0.3",
+    "date-fns": "^4.1.0",
+    "jspdf": "^4.2.0",
+    "jspdf-autotable": "^5.0.7",
+    "lucide-react": "^0.575.0",
+    "mysql2": "^3.18.2",
     "next": "16.1.6",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "recharts": "^3.7.0",
+    "xlsx": "^0.18.5",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

@@ -1,0 +1,31 @@
+{
+  "mcpServers": {
+    "next-devtools": {
+      "command": "npx",
+      "args": ["-y", "next-devtools-mcp@latest"]
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "c:\\wamp64\\www\\financas"
+      ]
+    },
+    "fetch": {
+      "command": "npx",
+      "args": ["-y", "mcp-fetch-node"]
+    },
+    "mysql": {
+      "command": "npx",
+      "args": ["-y", "mysql-query-mcp-server"],
+      "env": {
+        "LOCAL_DB_HOST": "127.0.0.1",
+        "LOCAL_DB_PORT": "3306",
+        "LOCAL_DB_NAME": "transportadora_financeiro",
+        "LOCAL_DB_USER": "root",
+        "LOCAL_DB_PASS": ""
+      }
+    }
+  }
+}
