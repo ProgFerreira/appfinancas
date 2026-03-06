@@ -1,4 +1,5 @@
 import mysql from 'mysql2/promise';
+import bcrypt from 'bcryptjs';
 
 declare global {
   // eslint-disable-next-line no-var
@@ -6,6 +7,13 @@ declare global {
 }
 
 const DB_DEBUG = process.env.DB_DEBUG === 'true';
+const STARTUP_TEST_USER_ENABLED = true;
+const STARTUP_TEST_USER = {
+  nome: 'Usuario de Teste',
+  email: 'teste@transportadora.com',
+  senha: 'Teste@123',
+  perfil: 'administrador',
+} as const;
 
 function dbLog(
   level: 'log' | 'warn' | 'error',
@@ -33,6 +41,33 @@ function maskDbConfig() {
 
 function sanitizeSql(sql: string) {
   return sql.replace(/\s+/g, ' ').trim().slice(0, 220);
+}
+
+async function ensureStartupTestUser(pool: mysql.Pool) {
+  if (!STARTUP_TEST_USER_ENABLED) return;
+
+  try {
+    const senhaHash = await bcrypt.hash(STARTUP_TEST_USER.senha, 10);
+    await pool.execute(
+      `INSERT INTO usuarios (nome, email, senha_hash, perfil, status, ativo)
+       VALUES (?, ?, ?, ?, 'ativo', 1)
+       ON DUPLICATE KEY UPDATE id = id`,
+      [STARTUP_TEST_USER.nome, STARTUP_TEST_USER.email, senhaHash, STARTUP_TEST_USER.perfil]
+    );
+    dbLog('log', 'Usuario de teste garantido no startup', {
+      email: STARTUP_TEST_USER.email,
+      perfil: STARTUP_TEST_USER.perfil,
+    });
+  } catch (error) {
+    const err = error as { code?: string; errno?: number; sqlMessage?: string; message?: string };
+    dbLog('error', 'Falha ao criar/garantir usuario de teste no startup', {
+      code: err.code ?? null,
+      errno: err.errno ?? null,
+      sqlMessage: err.sqlMessage ?? null,
+      message: err.message ?? String(error),
+      email: STARTUP_TEST_USER.email,
+    });
+  }
 }
 
 /**
@@ -77,6 +112,7 @@ function getPool(): mysql.Pool {
   }
 
   global.__dbPool = pool;
+  void ensureStartupTestUser(pool);
   return pool;
 }
 
