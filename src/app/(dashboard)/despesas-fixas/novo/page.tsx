@@ -8,7 +8,7 @@ export default function NovaDespesaFixaPage() {
         items={[
           { label: 'Dashboard', href: '/dashboard' },
           { label: 'Despesas fixas', href: '/despesas-fixas' },
-          { label: 'Nova' },
+          { label: 'Nova despesa' },
         ]}
       />
       <div className="mt-6 max-w-6xl">
