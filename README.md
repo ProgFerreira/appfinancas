@@ -1,7 +1,6 @@
 # Financeiro Transportadora (Next.js)
 
 Sistema financeiro para transportadoras, front-end em **Next.js 16**, **TypeScript** e **Tailwind CSS**, usando o banco de dados **transportadora_financeiro** (MySQL)
-
 Inclui: **competência vs caixa**, **ledger** imutável, **DRE por competência**, **fluxo de caixa por caixa**, **importação OFX**, **conciliação** (sugestões e confirmação), **RBAC** e **auditoria**.
 
 ## Requisitos
