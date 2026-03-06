@@ -13,11 +13,15 @@ export default function LoginPage() {
     setError('');
     setLoading(true);
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 segundos
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, senha }),
+        signal: controller.signal,
       });
+      clearTimeout(timeoutId);
       const text = await res.text();
       let data: { success?: boolean; error?: string } = {};
       try {
@@ -40,7 +44,12 @@ export default function LoginPage() {
       // Redirecionamento completo para garantir que o cookie de sessão seja enviado no próximo request
       window.location.href = '/dashboard';
     } catch (err) {
-      setError('Erro de rede (sem resposta do servidor). Verifique a internet e se a aplicação Node.js está rodando na Hostinger.');
+      const isTimeout = err instanceof Error && err.name === 'AbortError';
+      setError(
+        isTimeout
+          ? 'O servidor demorou para responder. Pode ser falha na conexão com o banco (confira DB_HOST, DB_PORT=3306 e variáveis na Hostinger) ou a aplicação Node está sobrecarregada.'
+          : 'Erro de rede (sem resposta do servidor). Verifique a internet e se a aplicação Node.js está rodando na Hostinger.'
+      );
     } finally {
       setLoading(false);
     }
