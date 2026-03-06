@@ -23,7 +23,14 @@ export default function LoginPage() {
       try {
         data = text ? JSON.parse(text) : {};
       } catch {
-        setError('Erro de conexão. O servidor não respondeu corretamente. Se o site está em hospedagem só de arquivos estáticos, é necessário rodar com Node.js para o login funcionar.');
+        const status = res.status;
+        if (status === 502 || status === 503) {
+          setError(`Servidor indisponível (erro ${status}). Aguarde alguns minutos ou verifique no painel se a aplicação Node.js está ativa e na porta 3000.`);
+        } else if (status === 404) {
+          setError('Rota de login não encontrada. Confirme que o deploy está com Node.js (variável NEXT_OUTPUT_MODE=node) e não só arquivos estáticos.');
+        } else {
+          setError(`Erro de conexão (status ${status}). O servidor não retornou resposta válida. Em hospedagem estática o login só funciona com Node.js.`);
+        }
         return;
       }
       if (!data.success) {
@@ -32,8 +39,8 @@ export default function LoginPage() {
       }
       // Redirecionamento completo para garantir que o cookie de sessão seja enviado no próximo request
       window.location.href = '/dashboard';
-    } catch {
-      setError('Erro de conexão. Verifique sua internet ou se o servidor está no ar. Em hospedagem estática (apenas pasta out/), o login só funciona com Node.js.');
+    } catch (err) {
+      setError('Erro de rede (sem resposta do servidor). Verifique a internet e se a aplicação Node.js está rodando na Hostinger.');
     } finally {
       setLoading(false);
     }
