@@ -14,8 +14,12 @@ CREATE TABLE IF NOT EXISTS tarefa_unidades (
 
 -- Coluna unidade_id em tarefas
 ALTER TABLE tarefas
-    ADD COLUMN unidade_id INT DEFAULT NULL AFTER prioridade,
-    ADD INDEX idx_tarefas_unidade (unidade_id),
+    ADD COLUMN unidade_id INT DEFAULT NULL AFTER prioridade;
+
+ALTER TABLE tarefas
+    ADD INDEX idx_tarefas_unidade (unidade_id);
+
+ALTER TABLE tarefas
     ADD CONSTRAINT fk_tarefas_unidade FOREIGN KEY (unidade_id) REFERENCES tarefa_unidades(id) ON DELETE SET NULL;
 
 -- Tipos padrão (empresa, pessoal, ministerio, familia)

@@ -14,8 +14,12 @@ CREATE TABLE IF NOT EXISTS documento_tipos (
 
 -- Coluna tipo_documento_id em documentos
 ALTER TABLE documentos
-    ADD COLUMN tipo_documento_id INT DEFAULT NULL AFTER descricao,
-    ADD INDEX idx_documentos_tipo (tipo_documento_id),
+    ADD COLUMN tipo_documento_id INT DEFAULT NULL AFTER descricao;
+
+ALTER TABLE documentos
+    ADD INDEX idx_documentos_tipo (tipo_documento_id);
+
+ALTER TABLE documentos
     ADD CONSTRAINT fk_documentos_tipo FOREIGN KEY (tipo_documento_id) REFERENCES documento_tipos(id) ON DELETE SET NULL;
 
 -- Tipos padrão

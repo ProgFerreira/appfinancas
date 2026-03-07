@@ -1,9 +1,10 @@
 import mysql from 'mysql2/promise';
 import bcrypt from 'bcryptjs';
+import { ensureDatabaseSchema } from './dbSchema';
 
 declare global {
-  // eslint-disable-next-line no-var
   var __dbPool: mysql.Pool | undefined;
+  var __dbReadyPromise: Promise<void> | undefined;
 }
 
 const DB_DEBUG = process.env.DB_DEBUG === 'true';
@@ -112,17 +113,42 @@ function getPool(): mysql.Pool {
   }
 
   global.__dbPool = pool;
-  void ensureStartupTestUser(pool);
   return pool;
 }
 
 const pool = getPool();
+
+function ensureDatabaseReady(): Promise<void> {
+  if (global.__dbReadyPromise) return global.__dbReadyPromise;
+
+  global.__dbReadyPromise = (async () => {
+    await ensureDatabaseSchema(pool);
+    await ensureStartupTestUser(pool);
+  })().catch((error: unknown) => {
+    global.__dbReadyPromise = undefined;
+    const err = error as { code?: string; errno?: number; message?: string; sqlMessage?: string };
+    dbLog('error', 'Falha ao sincronizar schema no startup', {
+      code: err.code ?? null,
+      errno: err.errno ?? null,
+      sqlMessage: err.sqlMessage ?? null,
+      message: err.message ?? String(error),
+    });
+    throw error;
+  });
+
+  return global.__dbReadyPromise;
+}
+
+void ensureDatabaseReady().catch(() => {
+  // A primeira query/getConnection reapresentará o erro com contexto.
+});
 
 export async function query<T = unknown>(
   sql: string,
   params?: (string | number | null)[]
 ): Promise<T> {
   try {
+    await ensureDatabaseReady();
     const [rows] = await pool.execute(sql, params);
     if (DB_DEBUG) {
       dbLog('log', 'Query executada com sucesso', {
@@ -148,6 +174,7 @@ export async function query<T = unknown>(
 
 export async function getConnection() {
   try {
+    await ensureDatabaseReady();
     const conn = await pool.getConnection();
     if (DB_DEBUG) {
       const threadId = (conn as unknown as { threadId?: number }).threadId;

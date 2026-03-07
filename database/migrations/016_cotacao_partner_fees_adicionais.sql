@@ -6,27 +6,69 @@
 USE transportadora_financeiro;
 
 ALTER TABLE cotacao_partner_fees
-  ADD COLUMN lib_suframa DECIMAL(12,2) DEFAULT 0 AFTER arredondar_peso_cima,
-  ADD COLUMN minimo_trecho DECIMAL(12,2) DEFAULT 0 AFTER lib_suframa,
-  ADD COLUMN tde_geral DECIMAL(12,2) DEFAULT 0 AFTER minimo_trecho,
-  ADD COLUMN reentrega_percent DECIMAL(5,2) DEFAULT 0 AFTER tde_geral,
-  ADD COLUMN reentrega_taxa_fixa DECIMAL(12,2) DEFAULT 0 AFTER reentrega_percent,
-  ADD COLUMN reentrega_minima DECIMAL(12,2) DEFAULT 0 AFTER reentrega_taxa_fixa,
-  ADD COLUMN reentrega_soma_icms TINYINT(1) NOT NULL DEFAULT 0 AFTER reentrega_minima,
-  ADD COLUMN devolucao_percent DECIMAL(5,2) DEFAULT 0 AFTER reentrega_soma_icms,
-  ADD COLUMN devolucao_taxa_fixa DECIMAL(12,2) DEFAULT 0 AFTER devolucao_percent,
-  ADD COLUMN devolucao_minima DECIMAL(12,2) DEFAULT 0 AFTER devolucao_taxa_fixa,
-  ADD COLUMN devolucao_soma_icms TINYINT(1) NOT NULL DEFAULT 0 AFTER devolucao_minima,
-  ADD COLUMN margem_rodoviario DECIMAL(5,2) DEFAULT 0 AFTER devolucao_soma_icms,
-  ADD COLUMN margem_aereo DECIMAL(5,2) DEFAULT 0 AFTER margem_rodoviario,
-  ADD COLUMN margem_base_cte VARCHAR(40) DEFAULT 'frete_total' AFTER margem_aereo,
-  ADD COLUMN tarifa_aerea_minima DECIMAL(12,2) DEFAULT 0 AFTER margem_base_cte,
-  ADD COLUMN tarifa_aerea_taxa_extra DECIMAL(12,2) DEFAULT 0 AFTER tarifa_aerea_minima,
-  ADD COLUMN tarifa_aerea_tad DECIMAL(12,2) DEFAULT 0 AFTER tarifa_aerea_taxa_extra,
-  ADD COLUMN tarifa_aerea_soma_minimo TINYINT(1) NOT NULL DEFAULT 1 AFTER tarifa_aerea_tad,
-  ADD COLUMN percentual_frete DECIMAL(5,2) DEFAULT 0 AFTER tarifa_aerea_soma_minimo,
-  ADD COLUMN percentual_pedagio_frete DECIMAL(5,2) DEFAULT 0 AFTER percentual_frete,
-  ADD COLUMN desconto_max_percent DECIMAL(5,2) DEFAULT 0 AFTER percentual_pedagio_frete,
+  ADD COLUMN lib_suframa DECIMAL(12,2) DEFAULT 0 AFTER arredondar_peso_cima;
+
+ALTER TABLE cotacao_partner_fees
+  ADD COLUMN minimo_trecho DECIMAL(12,2) DEFAULT 0 AFTER lib_suframa;
+
+ALTER TABLE cotacao_partner_fees
+  ADD COLUMN tde_geral DECIMAL(12,2) DEFAULT 0 AFTER minimo_trecho;
+
+ALTER TABLE cotacao_partner_fees
+  ADD COLUMN reentrega_percent DECIMAL(5,2) DEFAULT 0 AFTER tde_geral;
+
+ALTER TABLE cotacao_partner_fees
+  ADD COLUMN reentrega_taxa_fixa DECIMAL(12,2) DEFAULT 0 AFTER reentrega_percent;
+
+ALTER TABLE cotacao_partner_fees
+  ADD COLUMN reentrega_minima DECIMAL(12,2) DEFAULT 0 AFTER reentrega_taxa_fixa;
+
+ALTER TABLE cotacao_partner_fees
+  ADD COLUMN reentrega_soma_icms TINYINT(1) NOT NULL DEFAULT 0 AFTER reentrega_minima;
+
+ALTER TABLE cotacao_partner_fees
+  ADD COLUMN devolucao_percent DECIMAL(5,2) DEFAULT 0 AFTER reentrega_soma_icms;
+
+ALTER TABLE cotacao_partner_fees
+  ADD COLUMN devolucao_taxa_fixa DECIMAL(12,2) DEFAULT 0 AFTER devolucao_percent;
+
+ALTER TABLE cotacao_partner_fees
+  ADD COLUMN devolucao_minima DECIMAL(12,2) DEFAULT 0 AFTER devolucao_taxa_fixa;
+
+ALTER TABLE cotacao_partner_fees
+  ADD COLUMN devolucao_soma_icms TINYINT(1) NOT NULL DEFAULT 0 AFTER devolucao_minima;
+
+ALTER TABLE cotacao_partner_fees
+  ADD COLUMN margem_rodoviario DECIMAL(5,2) DEFAULT 0 AFTER devolucao_soma_icms;
+
+ALTER TABLE cotacao_partner_fees
+  ADD COLUMN margem_aereo DECIMAL(5,2) DEFAULT 0 AFTER margem_rodoviario;
+
+ALTER TABLE cotacao_partner_fees
+  ADD COLUMN margem_base_cte VARCHAR(40) DEFAULT 'frete_total' AFTER margem_aereo;
+
+ALTER TABLE cotacao_partner_fees
+  ADD COLUMN tarifa_aerea_minima DECIMAL(12,2) DEFAULT 0 AFTER margem_base_cte;
+
+ALTER TABLE cotacao_partner_fees
+  ADD COLUMN tarifa_aerea_taxa_extra DECIMAL(12,2) DEFAULT 0 AFTER tarifa_aerea_minima;
+
+ALTER TABLE cotacao_partner_fees
+  ADD COLUMN tarifa_aerea_tad DECIMAL(12,2) DEFAULT 0 AFTER tarifa_aerea_taxa_extra;
+
+ALTER TABLE cotacao_partner_fees
+  ADD COLUMN tarifa_aerea_soma_minimo TINYINT(1) NOT NULL DEFAULT 1 AFTER tarifa_aerea_tad;
+
+ALTER TABLE cotacao_partner_fees
+  ADD COLUMN percentual_frete DECIMAL(5,2) DEFAULT 0 AFTER tarifa_aerea_soma_minimo;
+
+ALTER TABLE cotacao_partner_fees
+  ADD COLUMN percentual_pedagio_frete DECIMAL(5,2) DEFAULT 0 AFTER percentual_frete;
+
+ALTER TABLE cotacao_partner_fees
+  ADD COLUMN desconto_max_percent DECIMAL(5,2) DEFAULT 0 AFTER percentual_pedagio_frete;
+
+ALTER TABLE cotacao_partner_fees
   ADD COLUMN acrescimo_max_percent DECIMAL(5,2) DEFAULT 0 AFTER desconto_max_percent;
 
 CREATE TABLE IF NOT EXISTS cotacao_partner_te (

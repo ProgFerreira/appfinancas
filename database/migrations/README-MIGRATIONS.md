@@ -2,6 +2,14 @@
 
 Execute as migrations na ordem do número no nome do arquivo (ex.: `001_*`, `002_*`).
 
+## Execução automática no startup
+
+O back-end executa automaticamente `database/schema.sql` e depois as migrations numeradas (`001...`) ao iniciar a primeira conexão com MySQL.
+
+- Migrações aplicadas ficam registradas na tabela `schema_migrations` com checksum.
+- Se uma migration já aplicada tiver checksum alterado, a execução falha por segurança.
+- Para permitir reaplicar migration alterada (não recomendado), use `DB_SCHEMA_ALLOW_CHANGED_MIGRATIONS=true`.
+
 ## RBAC e menu (DRE, Fluxo de caixa)
 
 Para que **DRE** e **Fluxo de caixa** apareçam no menu lateral (Relatórios), o banco precisa das tabelas `roles`, `permissions`, `role_permissions` e `user_roles` e das permissões inseridas.
@@ -32,3 +40,11 @@ Esse erro costuma ocorrer quando:
      `ALTER TABLE contas_pagar_pagamentos ENGINE=InnoDB;`  
      `ALTER TABLE contas_receber_recebimentos ENGINE=InnoDB;`
    - Depois adicione as FKs em `reconciliation_matches` (opcional).
+
+## Novas migrations estruturais (018 e 019)
+
+- `018_financeiro_competencia_ledger_audit.sql`
+  - adiciona `data_competencia` em `contas_pagar` e `contas_receber`.
+  - cria `ledger_entries` e `audit_logs`.
+- `019_bank_ofx_reconciliation.sql`
+  - cria/atualiza `bank_statement_imports`, `bank_transactions` e `reconciliation_matches`.

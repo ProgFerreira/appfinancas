@@ -223,7 +223,7 @@ export async function GET(request: NextRequest) {
         success: false,
         error: 'Erro ao listar transações.',
         ...(process.env.NODE_ENV !== 'production' && { detail: message }),
-        ...(isTableOrColumn && { hint: 'Execute a migration: database/migrations/20250227_create_bank_statement_imports_and_transactions.sql' }),
+        ...(isTableOrColumn && { hint: 'Execute a migration: database/migrations/019_bank_ofx_reconciliation.sql' }),
       },
       { status: 500 }
     );

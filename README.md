@@ -32,14 +32,14 @@ Inclui: **competência vs caixa**, **ledger** imutável, **DRE por competência*
 
 3. **Banco de dados**
 
-   - Crie o banco e importe o schema base: `database/schema.sql`
-   - Execute as **migrations** em `database/migrations/` na ordem (datas):
-     - `20250227_add_data_competencia_contas.sql`
-     - `20250227_create_ledger_entries.sql`
-     - `20250227_create_audit_logs.sql`
-     - `20250227_create_bank_statement_imports_and_transactions.sql`
-     - `20250227_create_reconciliation_matches.sql`
-     - `20250227_create_rbac_tables.sql`
+   - A aplicação agora sincroniza automaticamente schema e migrations no startup do back-end.
+   - Garanta que o banco informado em `DB_DATABASE` já exista e que o usuário tenha permissão de `CREATE/ALTER`.
+   - Se quiser executar manualmente, rode `database/schema.sql` e as migrations `database/migrations/*.sql` em ordem numérica (`001_...`, `002_...`, ..., `019_...`).
+   - Variáveis opcionais da sincronização automática:
+     - `DB_SCHEMA_SYNC=false` desativa sincronização no startup.
+     - `DB_SCHEMA_SYNC_LOCK_NAME` define nome do lock de migração.
+     - `DB_SCHEMA_SYNC_LOCK_TIMEOUT_SEC` timeout do lock (padrão 30s).
+     - `DB_SCHEMA_ALLOW_CHANGED_MIGRATIONS=true` permite reaplicar migration já aplicada com checksum alterado.
 
    Usuário padrão (após seed do schema):
 
@@ -119,6 +119,7 @@ src/
 
 - **Banco:** `transportadora_financeiro`
 - **Verificar conexão:** GET `/api/db/health`
+- **Sincronização automática:** ocorre na primeira conexão ao banco no startup (schema base + migrations).
 
 ## Checklist de boas práticas
 
