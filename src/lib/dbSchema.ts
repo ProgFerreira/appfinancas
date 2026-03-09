@@ -31,6 +31,13 @@ type ExecutionStats = {
   ignored: number;
 };
 
+type ParsedForeignKey = {
+  tableName: string;
+  columnNames: string[];
+  referencedTableName: string;
+  referencedColumnNames: string[];
+};
+
 function schemaLog(level: 'log' | 'warn' | 'error', message: string, meta?: Record<string, unknown>) {
   const ts = new Date().toISOString();
   if (meta) {
@@ -159,6 +166,46 @@ function shouldSkipStatement(statement: string): boolean {
   );
 }
 
+function parseIdentifierList(raw: string): string[] {
+  return raw
+    .split(',')
+    .map((value) => value.trim().replace(/[`"]/g, '').toLowerCase())
+    .filter(Boolean);
+}
+
+function parseAddForeignKeyStatement(statement: string): ParsedForeignKey | null {
+  const match = statement.match(
+    /^\s*ALTER\s+TABLE\s+`?([A-Za-z0-9_]+)`?\s+ADD\s+(?:CONSTRAINT\s+`?[A-Za-z0-9_]+`?\s+)?FOREIGN\s+KEY\s*\(([^)]+)\)\s+REFERENCES\s+`?([A-Za-z0-9_]+)`?\s*\(([^)]+)\)/is
+  );
+  if (!match) return null;
+
+  const [, rawTableName, rawColumnNames, rawReferencedTableName, rawReferencedColumnNames] = match;
+  const columnNames = parseIdentifierList(rawColumnNames);
+  const referencedColumnNames = parseIdentifierList(rawReferencedColumnNames);
+  if (!columnNames.length || !referencedColumnNames.length || columnNames.length !== referencedColumnNames.length) {
+    return null;
+  }
+
+  return {
+    tableName: rawTableName.replace(/[`"]/g, '').toLowerCase(),
+    columnNames,
+    referencedTableName: rawReferencedTableName.replace(/[`"]/g, '').toLowerCase(),
+    referencedColumnNames,
+  };
+}
+
+function isDuplicateForeignKeyError(error: SqlError, statement: string): boolean {
+  if (!parseAddForeignKeyStatement(statement)) return false;
+  if (error.errno === 1826 || error.code === 'ER_FK_DUP_NAME') return true;
+
+  const message = `${error.sqlMessage ?? ''} ${error.message ?? ''}`.toLowerCase();
+  return (
+    message.includes('duplicate foreign key constraint name') ||
+    message.includes('errno: 121') ||
+    message.includes('duplicate key on write or update')
+  );
+}
+
 function isIgnorableSqlError(error: SqlError, statement: string): boolean {
   const normalizedStmt = statement.trim().toUpperCase();
   const isInsertLike = /^INSERT\b|^REPLACE\b|^UPDATE\b/.test(normalizedStmt);
@@ -178,6 +225,7 @@ function isIgnorableSqlError(error: SqlError, statement: string): boolean {
 
   const message = `${error.sqlMessage ?? ''} ${error.message ?? ''}`.toLowerCase();
   if (isInsertLike && message.includes('duplicate entry')) return true;
+  if (isDuplicateForeignKeyError(error, statement)) return true;
   return (
     message.includes('duplicate column name') ||
     message.includes('duplicate key name') ||
@@ -185,6 +233,59 @@ function isIgnorableSqlError(error: SqlError, statement: string): boolean {
     message.includes('already exists') ||
     message.includes('multiple primary key')
   );
+}
+
+async function hasEquivalentForeignKey(connection: PoolConnection, statement: string): Promise<boolean> {
+  const parsed = parseAddForeignKeyStatement(statement);
+  if (!parsed) return false;
+
+  const [rows] = await connection.query(
+    `SELECT
+       GROUP_CONCAT(k.COLUMN_NAME ORDER BY k.ORDINAL_POSITION SEPARATOR ',') AS child_columns,
+       GROUP_CONCAT(k.REFERENCED_COLUMN_NAME ORDER BY k.ORDINAL_POSITION SEPARATOR ',') AS parent_columns,
+       MAX(k.REFERENCED_TABLE_NAME) AS referenced_table
+     FROM information_schema.KEY_COLUMN_USAGE k
+     JOIN information_schema.TABLE_CONSTRAINTS tc
+       ON tc.CONSTRAINT_SCHEMA = k.CONSTRAINT_SCHEMA
+      AND tc.TABLE_NAME = k.TABLE_NAME
+      AND tc.CONSTRAINT_NAME = k.CONSTRAINT_NAME
+     WHERE k.CONSTRAINT_SCHEMA = DATABASE()
+       AND k.TABLE_NAME = ?
+       AND tc.CONSTRAINT_TYPE = 'FOREIGN KEY'
+     GROUP BY k.CONSTRAINT_NAME`,
+    [parsed.tableName]
+  );
+
+  const expectedChild = parsed.columnNames.join(',');
+  const expectedParent = parsed.referencedColumnNames.join(',');
+
+  for (const row of (Array.isArray(rows) ? rows : []) as Array<{
+    child_columns?: string | null;
+    parent_columns?: string | null;
+    referenced_table?: string | null;
+  }>) {
+    const childColumns = String(row.child_columns ?? '')
+      .split(',')
+      .map((col) => col.trim().toLowerCase())
+      .filter(Boolean)
+      .join(',');
+    const parentColumns = String(row.parent_columns ?? '')
+      .split(',')
+      .map((col) => col.trim().toLowerCase())
+      .filter(Boolean)
+      .join(',');
+    const referencedTable = String(row.referenced_table ?? '').trim().toLowerCase();
+
+    if (
+      childColumns === expectedChild &&
+      parentColumns === expectedParent &&
+      referencedTable === parsed.referencedTableName
+    ) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 async function ensureMigrationsTable(connection: PoolConnection) {
@@ -277,6 +378,14 @@ async function executeStatements(
     } catch (error) {
       const sqlError = error as SqlError;
       if (options?.tolerateDuplicateErrors && isIgnorableSqlError(sqlError, statement)) {
+        if (isDuplicateForeignKeyError(sqlError, statement)) {
+          const equivalentExists = await hasEquivalentForeignKey(connection, statement);
+          if (!equivalentExists) {
+            throw new Error(
+              `Falha em migration ${migrationName}: ${sqlError.sqlMessage ?? sqlError.message ?? 'erro desconhecido'} | SQL: ${sanitizeSql(statement)}`
+            );
+          }
+        }
         stats.ignored += 1;
         schemaLog('warn', 'Comando SQL ignorado por já existir (idempotência)', {
           migration: migrationName,
