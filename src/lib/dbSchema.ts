@@ -175,7 +175,7 @@ function parseIdentifierList(raw: string): string[] {
 
 function parseAddForeignKeyStatement(statement: string): ParsedForeignKey | null {
   const match = statement.match(
-    /^\s*ALTER\s+TABLE\s+`?([A-Za-z0-9_]+)`?\s+ADD\s+(?:CONSTRAINT\s+`?[A-Za-z0-9_]+`?\s+)?FOREIGN\s+KEY\s*\(([^)]+)\)\s+REFERENCES\s+`?([A-Za-z0-9_]+)`?\s*\(([^)]+)\)/is
+    /^\s*ALTER\s+TABLE\s+`?([A-Za-z0-9_]+)`?\s+ADD\s+(?:CONSTRAINT\s+`?[A-Za-z0-9_]+`?\s+)?FOREIGN\s+KEY\s*\(([^)]+)\)\s+REFERENCES\s+`?([A-Za-z0-9_]+)`?\s*\(([^)]+)\)/i
   );
   if (!match) return null;
 
